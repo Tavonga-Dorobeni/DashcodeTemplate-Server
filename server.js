@@ -55,15 +55,16 @@ app.get("/", function (req, res) {
   res.sendFile(path + "index.html");
 });
 
-require("./app/routes/tutorial.routes")(app);
+require("./app/routes/appointments.routes")(app);
 require("./app/routes/auth.routes")(app);
 require("./app/routes/access.routes")(app);
 require("./app/routes/user.routes")(app);
 
-require("./app/routes/tool_types.routes")(app);
-require("./app/routes/tools.routes")(app);
-require("./app/routes/sections.routes")(app);
-require("./app/routes/locations.routes")(app);
+require("./app/routes/claims.routes")(app);
+require("./app/routes/dependants.routes")(app);
+require("./app/routes/medical_history.routes")(app);
+require("./app/routes/patients.routes")(app);
+require("./app/routes/procedures.routes")(app);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;

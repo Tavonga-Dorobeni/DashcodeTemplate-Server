@@ -1,32 +1,32 @@
 const db = require("../models");
-const ToolType = db.tool_types;
+const Procedure = db.procedure;
 const Op = db.Sequelize.Op;
 
-// Create and Save a new ToolType
+// Create and Save a new Procedure
 exports.create = (req, res) => {
-  // Create a ToolType
-  ToolType.create(req.body)
+  // Create a Procedure
+  Procedure.create(req.body)
     .then((data) => {
       res.send({
-        tool_type: data,
-        message: "ToolType posted successfully",
+        procedure: data,
+        message: "Procedure posted successfully",
       });
     })
     .catch((err) => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while creating the ToolType.",
+          err.message || "Some error occurred while creating the Procedure.",
       });
       console.log(err)
     });
 };
 
-// Retrieve all ToolTypes from the database.
+// Retrieve all Procedures from the database.
 exports.findAll = (req, res) => {
   const title = req.query.title;
   var condition = title ? { title: { [Op.like]: `%${title}%` } } : null;
 
-  ToolType.findAll({
+  Procedure.findAll({
   where: condition,
   include: [
     {
@@ -47,43 +47,43 @@ exports.findAll = (req, res) => {
     });
 };
 
-// Find a single ToolType with an id
+// Find a single Procedure with an id
 exports.findOne = (req, res) => {
   const id = req.params.id;
 
-  ToolType.findByPk(id)
+  Procedure.findByPk(id)
     .then((data) => {
       if (data) {
         res.send(data);
       } else {
         res.status(404).send({
-          message: `Cannot find ToolType with id=${id}.`,
+          message: `Cannot find Procedure with id=${id}.`,
         });
       }
     })
     .catch((err) => {
       res.status(500).send({
-        message: "Error while retrieving ToolType",
+        message: "Error while retrieving Procedure",
       });
-      console.log(">> Error while retrieving ToolType: ", err);
+      console.log(">> Error while retrieving Procedure: ", err);
     });
 };
 
-// Update a ToolType by the id in the request
+// Update a Procedure by the id in the request
 exports.update = (req, res) => {
   const id = req.params.id;
 
-  ToolType.update(req.body, {
-    where: { ToolTypeID: id },
+  Procedure.update(req.body, {
+    where: { ProcedureID: id },
   })
     .then((num) => {
       if (num == 1) {
         res.send({
-          message: "ToolType was updated successfully.",
+          message: "Procedure was updated successfully.",
         });
       } else {
         res.send({
-          message: `ToolType was not found!`,
+          message: `Procedure was not found!`,
         });
       }
     })
@@ -95,51 +95,51 @@ exports.update = (req, res) => {
     })
     .catch((err) => {
       res.status(500).send({
-        message: "Error while updating ToolType",
+        message: "Error while updating Procedure",
       });
-      console.log(">> Error while updating ToolType: ", err);
+      console.log(">> Error while updating Procedure: ", err);
     });
 };
 
-// Delete a ToolType with the specified id in the request
+// Delete a Procedure with the specified id in the request
 exports.delete = (req, res) => {
   const id = req.params.id;
 
-  ToolType.destroy({
-    where: { ToolTypeID: id },
+  Procedure.destroy({
+    where: { ProcedureID: id },
   })
     .then((num) => {
       if (num == 1) {
         res.send({
-          message: "ToolType was deleted successfully!",
+          message: "Procedure was deleted successfully!",
         });
       } else {
         res.send({
-          message: `ToolType was not found!`,
+          message: `Procedure was not found!`,
         });
       }
     })
     .catch((err) => {
       res.status(500).send({
-        message: "Could not delete ToolType",
+        message: "Could not delete Procedure",
       });
-      console.log(">> Error while deleting ToolType: ", err);
+      console.log(">> Error while deleting Procedure: ", err);
     });
 };
 
-// Delete all ToolTypes from the database.
+// Delete all Procedures from the database.
 exports.deleteAll = (req, res) => {
-  ToolType.destroy({
+  Procedure.destroy({
     where: {},
     truncate: false,
   })
     .then((nums) => {
-      res.send({ message: `${nums} ToolTypes were deleted successfully!` });
+      res.send({ message: `${nums} Procedures were deleted successfully!` });
     })
     .catch((err) => {
       res.status(500).send({
         message: "An error occurred while deleting all applications.",
       });
-      console.log(">> Error while deleting all ToolTypes: ", err);
+      console.log(">> Error while deleting all Procedures: ", err);
     });
 };

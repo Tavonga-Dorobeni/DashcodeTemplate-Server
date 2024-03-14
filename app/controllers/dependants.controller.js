@@ -1,32 +1,32 @@
 const db = require("../models");
-const Location = db.locations;
+const Dependant = db.dependant;
 const Op = db.Sequelize.Op;
 
-// Create and Save a new Location
+// Create and Save a new Dependant
 exports.create = (req, res) => {
-  // Create a Location
-  Location.create(req.body)
+  // Create a Dependant
+  Dependant.create(req.body)
     .then((data) => {
       res.send({
-        location: data,
-        message: "Location posted successfully",
+        dependant: data,
+        message: "Dependant posted successfully",
       });
     })
     .catch((err) => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while creating the Location.",
+          err.message || "Some error occurred while creating the Dependant.",
       });
       console.log(err)
     });
 };
 
-// Retrieve all Locations from the database.
+// Retrieve all Dependants from the database.
 exports.findAll = (req, res) => {
   const title = req.query.title;
   var condition = title ? { title: { [Op.like]: `%${title}%` } } : null;
 
-  Location.findAll({
+  Dependant.findAll({
   where: condition,
   include: [
     {
@@ -47,43 +47,43 @@ exports.findAll = (req, res) => {
     });
 };
 
-// Find a single Location with an id
+// Find a single Dependant with an id
 exports.findOne = (req, res) => {
   const id = req.params.id;
 
-  Location.findByPk(id)
+  Dependant.findByPk(id)
     .then((data) => {
       if (data) {
         res.send(data);
       } else {
         res.status(404).send({
-          message: `Cannot find Location with id=${id}.`,
+          message: `Cannot find Dependant with id=${id}.`,
         });
       }
     })
     .catch((err) => {
       res.status(500).send({
-        message: "Error while retrieving Location",
+        message: "Error while retrieving Dependant",
       });
-      console.log(">> Error while retrieving Location: ", err);
+      console.log(">> Error while retrieving Dependant: ", err);
     });
 };
 
-// Update a Location by the id in the request
+// Update a Dependant by the id in the request
 exports.update = (req, res) => {
   const id = req.params.id;
 
-  Location.update(req.body, {
-    where: { LocationID: id },
+  Dependant.update(req.body, {
+    where: { DependantID: id },
   })
     .then((num) => {
       if (num == 1) {
         res.send({
-          message: "Location was updated successfully.",
+          message: "Dependant was updated successfully.",
         });
       } else {
         res.send({
-          message: `Location was not found!`,
+          message: `Dependant was not found!`,
         });
       }
     })
@@ -95,51 +95,51 @@ exports.update = (req, res) => {
     })
     .catch((err) => {
       res.status(500).send({
-        message: "Error while updating Location",
+        message: "Error while updating Dependant",
       });
-      console.log(">> Error while updating Location: ", err);
+      console.log(">> Error while updating Dependant: ", err);
     });
 };
 
-// Delete a Location with the specified id in the request
+// Delete a Dependant with the specified id in the request
 exports.delete = (req, res) => {
   const id = req.params.id;
 
-  Location.destroy({
-    where: { LocationID: id },
+  Dependant.destroy({
+    where: { DependantID: id },
   })
     .then((num) => {
       if (num == 1) {
         res.send({
-          message: "Location was deleted successfully!",
+          message: "Dependant was deleted successfully!",
         });
       } else {
         res.send({
-          message: `Location was not found!`,
+          message: `Dependant was not found!`,
         });
       }
     })
     .catch((err) => {
       res.status(500).send({
-        message: "Could not delete Location",
+        message: "Could not delete Dependant",
       });
-      console.log(">> Error while deleting Location: ", err);
+      console.log(">> Error while deleting Dependant: ", err);
     });
 };
 
-// Delete all Locations from the database.
+// Delete all Dependants from the database.
 exports.deleteAll = (req, res) => {
-  Location.destroy({
+  Dependant.destroy({
     where: {},
     truncate: false,
   })
     .then((nums) => {
-      res.send({ message: `${nums} Locations were deleted successfully!` });
+      res.send({ message: `${nums} Dependants were deleted successfully!` });
     })
     .catch((err) => {
       res.status(500).send({
         message: "An error occurred while deleting all applications.",
       });
-      console.log(">> Error while deleting all Locations: ", err);
+      console.log(">> Error while deleting all Dependants: ", err);
     });
 };

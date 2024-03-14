@@ -1,20 +1,20 @@
 module.exports = (sequelize, Sequelize) => {
-    const ToolType = sequelize.define("tool_type", {
-      ToolTypeID: {
+    const Procedures = sequelize.define("procedures", {
+      ProcedureID: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true
       },
-      Code: {
+      Name: {
         type: Sequelize.STRING,
         allowNull: false
       },
-      Description: {
-        type: Sequelize.STRING,
+      Price: {
+        type: Sequelize.INTEGER,
         allowNull: false
       }
     });
   
-    return ToolType;
+    return Procedures;
   };
   

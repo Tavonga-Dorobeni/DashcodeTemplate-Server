@@ -1,20 +1,20 @@
 module.exports = (sequelize, Sequelize) => {
-    const Section = sequelize.define("section", {
-      SectionID: {
+    const Claims = sequelize.define("claims", {
+      ClaimID: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true
       },
-      Code: {
-        type: Sequelize.STRING,
+      PatientID: {
+        type: Sequelize.INTEGER,
         allowNull: false
       },
-      Description: {
+      Notes: {
         type: Sequelize.STRING,
         allowNull: false
       }
     });
   
-    return Section;
+    return Claims;
   };
   
