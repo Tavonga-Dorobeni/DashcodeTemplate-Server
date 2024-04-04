@@ -47,6 +47,10 @@ db.dependant.belongsToMany(db.patient, {
   otherKey: "DependantID",
 });
 
+db.claim.hasMany(db.claim_procedure, {
+  as: "procedures",
+  foreignKey: "ClaimID",
+}, {foreignKeyConstraint: true});
 
 db.ROLES = ["user", "admin", "moderator"];
 

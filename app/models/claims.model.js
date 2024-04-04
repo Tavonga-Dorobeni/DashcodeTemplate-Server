@@ -5,13 +5,22 @@ module.exports = (sequelize, Sequelize) => {
         primaryKey: true,
         autoIncrement: true
       },
-      PatientID: {
+      AppointmentID: {
         type: Sequelize.INTEGER,
         allowNull: false
       },
       Notes: {
         type: Sequelize.STRING,
         allowNull: false
+      },
+      Status: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
+      Amount: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        defaultValue: 0
       }
     });
   

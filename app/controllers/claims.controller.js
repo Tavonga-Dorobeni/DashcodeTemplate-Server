@@ -1,24 +1,54 @@
 const db = require("../models");
 const Claim = db.claim;
+const ClaimProcedure = db.claim_procedure;
 const Op = db.Sequelize.Op;
 
 // Create and Save a new Claim
-exports.create = (req, res) => {
-  // Create a Claim
-  Claim.create(req.body)
-    .then((data) => {
-      res.send({
-        claim: data,
-        message: "Claim posted successfully",
-      });
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while creating the Claim.",
-      });
-      console.log(err)
+exports.create = async (req, res) => {
+  const t = await db.sequelize.transaction();
+
+  try {
+    await Claim.create(req.body, { transaction: t })
+
+    const data = await Claim.findOne({
+      where: {},
+      order: [ [ 'createdAt', 'DESC' ]],
+      transaction: t
     });
+
+    for (let i = 0; i < req.body.procedures.length; i++) {
+      await ClaimProcedure.create({
+        ClaimID: data.ClaimID,
+        ProcedureID: req.body.procedures[i].ProcedureID
+      }, { transaction: t })
+    }
+
+    const claim = await Claim.findOne({
+      where: {ClaimID: data.ClaimID},
+      include: [
+        {
+          all: true,
+          nested: true
+        }
+      ],
+      raw: false,
+      transaction: t
+    })
+
+    res.send({
+      claim: claim,
+      message: "Claim posted successfully",
+    });    
+
+    await t.commit();
+  } catch (error) {
+    res.status(500).send({
+      message:
+      error.message || "Some error occurred while creating the Claim.",
+    });
+    console.log(error)    
+    await t.rollback();
+  }
 };
 
 // Retrieve all Claims from the database.
@@ -70,35 +100,39 @@ exports.findOne = (req, res) => {
 };
 
 // Update a Claim by the id in the request
-exports.update = (req, res) => {
+exports.update = async (req, res) => {
+  const t = await db.sequelize.transaction();
   const id = req.params.id;
 
-  Claim.update(req.body, {
-    where: { ClaimID: id },
-  })
-    .then((num) => {
-      if (num == 1) {
-        res.send({
-          message: "Claim was updated successfully.",
-        });
-      } else {
-        res.send({
-          message: `Claim was not found!`,
-        });
-      }
+  try {
+    await Claim.update(req.body, {
+      where: { ClaimID: id },
+      transaction: t
+    })    
+
+    await ClaimProcedure.destroy({
+      where: {
+        ClaimID: id
+      },
+      transaction: t
     })
-    .catch(db.Sequelize.UniqueConstraintError, (err) => {
-      res.status(500).send({
-        message: `Duplication Error Occured. "${err.errors[0].value}" already exists!!`,
-      });
-      console.log(">> Duplication Error occured: ", err);
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message: "Error while updating Claim",
-      });
-      console.log(">> Error while updating Claim: ", err);
+
+    for (let i = 0; i < req.body.procedures.length; i++) {
+      await ClaimProcedure.create({
+        ClaimID: id,
+        ProcedureID: req.body.procedures[i].ProcedureID
+      }, { transaction: t })
+    }
+
+    res.send({message: "Claim was updated successfully.",});
+    await t.commit();
+  } catch (error) {
+    res.status(500).send({
+      message: "Error while updating Claim",
     });
+    console.log(">> Error while updating Claim: ", error);
+    await t.rollback();
+  }
 };
 
 // Delete a Claim with the specified id in the request

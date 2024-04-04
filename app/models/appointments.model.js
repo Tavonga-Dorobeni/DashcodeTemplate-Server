@@ -9,6 +9,11 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.INTEGER,
       allowNull: false
     },
+    DependantID: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+      defaultValue: 0
+    },
     DateScheduled: {
       type: Sequelize.DATE,
       allowNull: false
