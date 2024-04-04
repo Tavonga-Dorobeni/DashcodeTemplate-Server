@@ -85,6 +85,7 @@ const io = require("socket.io")(server, {
         callback(new Error('Not allowed by CORS'))
       }
     },
+    credentials: true,
     methods: ["GET", "POST"],
   },
 });
