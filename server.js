@@ -86,8 +86,10 @@ const io = require("socket.io")(server, {
       }
     },
     credentials: true,
+    transports: ['websocket', 'polling'],
     methods: ["GET", "POST"],
   },
+  allowEIO3: true
 });
 
 io.on("connection", (socket) => {
