@@ -74,10 +74,17 @@ const server = app.listen(PORT, () => {
 
 // const io = socket(server);
 // io.on("connection", controller.newupdate );
+var whitelist = ['http://localhost:8081', 'https://mifp200.netlify.app']
 
 const io = require("socket.io")(server, {
   cors: {
-    origin: "*",
+    origin: function (origin, callback) {
+      if (whitelist.indexOf(origin) !== -1) {
+        callback(null, true)
+      } else {
+        callback(new Error('Not allowed by CORS'))
+      }
+    },
     methods: ["GET", "POST"],
   },
 });
