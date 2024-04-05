@@ -19,7 +19,7 @@ exports.create = async (req, res) => {
     for (let i = 0; i < req.body.procedures.length; i++) {
       await ClaimProcedure.create({
         ClaimID: data.ClaimID,
-        ProcedureID: req.body.procedures[i].ProcedureID
+        ProcedureID: req.body.procedures[i]
       }, { transaction: t })
     }
 

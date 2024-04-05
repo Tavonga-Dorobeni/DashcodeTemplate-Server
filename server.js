@@ -94,6 +94,9 @@ const io = require("socket.io")(server, {
 
 io.on("connection", (socket) => {
   console.log(`Made socket connection ${socket.id}`);
+  socket.on("qrcode_detected", function (data) {
+    socket.broadcast.emit("qr_detection_res", data);
+  });
   socket.on("socketreq", function (data) {
     console.log(`broadcasting data: ${data}`);
     socket.broadcast.emit("socketres", data);
