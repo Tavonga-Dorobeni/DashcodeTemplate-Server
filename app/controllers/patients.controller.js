@@ -1,16 +1,40 @@
 const db = require("../models");
 const Patient = db.patient;
+const User = db.user;
+const Role = db.role;
 const Op = db.Sequelize.Op;
+
+var bcrypt = require("bcryptjs");
 
 // Create and Save a new Patient
 exports.create = (req, res) => {
   // Create a Patient
   Patient.create(req.body)
     .then((data) => {
-      res.send({
-        patient: data,
-        message: "Patient posted successfully",
-      });
+      const user = {
+        firstname: req.body.Firstnames,
+        lastname: req.body.Surname,
+        username: (req.body.Firstnames.charAt(0) + req.body.Surname).toLowerCase(),
+        email: req.body.Email,
+        phone: req.body.CellNumber,
+        NationalID: req.body.IDNumber,
+        password: bcrypt.hashSync(req.body.MembershipNo, 8)
+      }
+
+      User.create(user)
+      .then((user) => {
+        Role.findAll({
+          where: {
+            name: 'Patient',
+          },
+        }).then((roles) => {
+          user.setRoles(roles);
+          res.send({
+            patient: data,
+            message: "Patient posted successfully",
+          });          
+        });
+      })
     })
     .catch((err) => {
       res.status(500).send({
