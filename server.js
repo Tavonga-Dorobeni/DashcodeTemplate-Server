@@ -97,6 +97,14 @@ io.on("connection", (socket) => {
   socket.on("qrcode_detected", function (data) {
     socket.broadcast.emit("qr_detection_res", data);
   });
+  socket.on("claim_flagged", function (data) {
+    console.log(`broadcasting data: ${data}`);
+    socket.broadcast.emit("claim_flagged_res", data);
+  });
+  socket.on("claim_verified", function (data) {
+    console.log(`broadcasting data: ${data}`);
+    socket.broadcast.emit("claim_verified_res", data);
+  });
   socket.on("socketreq", function (data) {
     console.log(`broadcasting data: ${data}`);
     socket.broadcast.emit("socketres", data);
