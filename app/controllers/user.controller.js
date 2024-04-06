@@ -74,7 +74,7 @@ exports.findOne = (req, res) => {
 exports.update = (req, res) => {
   const id = req.params.id;
 
-  if(req.body.newpassword != ''){
+  if(req.body.newpassword){
     req.body.password = bcrypt.hashSync(req.body.newpassword, 8)
   }
 
