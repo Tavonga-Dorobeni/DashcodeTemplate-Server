@@ -74,7 +74,7 @@ const server = app.listen(PORT, () => {
 
 // const io = socket(server);
 // io.on("connection", controller.newupdate );
-var whitelist = ['http://localhost:8081', 'http://localhost:8081', 'https://mifp200.netlify.app']
+var whitelist = ['http://localhost:8081', 'http://localhost:8082', 'https://mifp200.netlify.app']
 
 const io = require("socket.io")(server, {
   cors: {
